@@ -7,14 +7,12 @@
   img {
     height: 48px;
   }
-  &:hover {
-    .circle {
-      background-color: #fff;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      opacity: 0.5;
-    }
+  .circle {
+    background-color: #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    opacity: 0.5;
   }
 }
 

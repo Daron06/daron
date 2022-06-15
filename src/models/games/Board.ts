@@ -9,28 +9,7 @@ import { Queen } from './figures/Queen';
 
 export class Board {
   cells: Cell[][] = [];
-
-  public initCell() {
-    for (let i = 0; i < 8; i++) {
-      const row: Cell[] = [];
-      for (let j = 0; j < 8; j++) {
-        if ((i + j) % 2 !== 0) {
-          if (i === 1) {
-            row.push(new Cell(this, i, j, Colors.BLACK, null));
-          } else {
-            row.push(new Cell(this, i, j, Colors.BLACK, null)); // чёрные
-          }
-        } else {
-          row.push(new Cell(this, i, j, Colors.WHITE, null)); // белые
-        }
-      }
-      this.cells.push(row);
-    }
-  }
-
-  public getCells(x: number, y: number) {
-    return this.cells[y][x];
-  }
+  activeCell: Cell[] = [];
 
   private addPawn() {
     for (let i = 0; i < 8; i++) {
@@ -70,6 +49,28 @@ export class Board {
     new Bishop(Colors.BLACK, this.getCells(5, 7));
   }
 
+  public initCell() {
+    for (let i = 0; i < 8; i++) {
+      const row: Cell[] = [];
+      for (let j = 0; j < 8; j++) {
+        if ((i + j) % 2 !== 0) {
+          if (i === 1) {
+            row.push(new Cell(this, i, j, Colors.BLACK, null));
+          } else {
+            row.push(new Cell(this, i, j, Colors.BLACK, null)); // чёрные
+          }
+        } else {
+          row.push(new Cell(this, i, j, Colors.WHITE, null)); // белые
+        }
+      }
+      this.cells.push(row);
+    }
+  }
+
+  public getCells(x: number, y: number) {
+    return this.cells[y][x];
+  }
+
   public addFigure() {
     this.addPawn();
     this.addQueen();
@@ -77,5 +78,37 @@ export class Board {
     this.addRook();
     this.addKnight();
     this.addKing();
+  }
+
+  public checkAvailable(cell: Cell) {
+    cell.figure?.showAvailable();
+  }
+
+  public doStep(cell: Cell) {
+    this.cells.map((el) => el.map((item) => (item.available = false)));
+
+    if (this.activeCell[0]?.figure === null) {
+      this.activeCell = [];
+    }
+
+    if (this.activeCell.length < 2 && this.activeCell[0] !== cell) {
+      this.activeCell.push(cell);
+    }
+
+    if (this.activeCell.length === 1) {
+      this.checkAvailable(cell);
+    }
+
+    if (this.activeCell.length === 2) {
+      if (cell.moveFigure(this.activeCell[0])) {
+        cell.figure?.cleanAvailable();
+        this.activeCell = [];
+      } else {
+        this.activeCell[0] = cell;
+        this.checkAvailable(cell);
+      }
+    }
+
+    console.log(this.activeCell);
   }
 }

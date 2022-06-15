@@ -27,9 +27,19 @@ export class Figure {
     this.id = Math.random();
   }
 
-  canMove(target: Cell): boolean {
-    return true;
+  public canMove(target: Cell): boolean {
+    return target.available;
   }
 
-  moveFigure(target: Cell) {}
+  public moveFigure(cell: Cell) {
+    this.cell = cell;
+  }
+
+  public showAvailable(): void {}
+
+  public cleanAvailable(): void {
+    this.cell.board.cells.map((el) => el.map((item) => (item.available = false)));
+  }
+
+  public checkmate(cell: Cell) {}
 }

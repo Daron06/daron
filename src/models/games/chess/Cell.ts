@@ -20,4 +20,16 @@ export class Cell {
     this.available = false;
     this.id = Math.random();
   }
+
+  public moveFigure(cell: Cell): boolean {
+    if (cell.figure?.canMove(this)) {
+      cell.figure.moveFigure(this);
+      this.figure = cell.figure;
+      cell.figure = null;
+      return true;
+    } else {
+      cell.figure?.cleanAvailable();
+      return false;
+    }
+  }
 }

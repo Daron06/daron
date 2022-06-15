@@ -1,1 +1,4 @@
-export class Player {}
+export enum PlayersName {
+  PRIMARY = 'Главный',
+  SECONDARY = 'Второй',
+}

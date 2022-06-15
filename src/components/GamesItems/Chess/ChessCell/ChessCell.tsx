@@ -1,40 +1,46 @@
 import React from 'react';
-import { Colors } from '../../../../models/games/chess/Colors';
-import { Figure } from '../../../../models/games/figures/Figure';
+import { Cell } from '../../../../models/games/chess/Cell';
 import styles from './ChessCell.module.scss';
 
 interface ChessCellProps {
-  x: number;
-  board: any;
-  y: number;
-  color: Colors;
-  figure: Figure | null;
-  available: boolean;
-  id: number;
+  cell: Cell;
 
+  handleStep: (cell: Cell) => void;
+  setTakeFigure: React.Dispatch<React.SetStateAction<Cell | null>>;
+  takeFigure: Cell | null;
   setActive: React.Dispatch<React.SetStateAction<number | null>>;
   active: number | null;
 }
 
 export const ChessCell: React.FC<ChessCellProps> = ({
-  x,
-  y,
-  board,
-  color,
-  figure,
-  available,
-  id,
+  cell,
   setActive,
   active,
+  handleStep,
+  setTakeFigure,
+  takeFigure,
 }) => {
-  console.log(figure);
+  const onClick = () => {
+    setActive(cell.figure?.logo ? cell.id : null);
+    handleStep(cell);
+
+    if (cell.figure?.logo && !active) {
+      setTakeFigure(cell);
+    }
+    if (takeFigure) {
+      setTakeFigure(null);
+    }
+  };
+
   return (
     <div
-      onClick={() => setActive(id)}
-      className={`${styles.cell} ${styles[active === id && figure?.logo ? 'active' : color]}`}
+      onClick={onClick}
+      className={`${styles.cell} ${
+        styles[active === cell.id && cell.figure?.logo ? 'active' : cell.color]
+      }`}
     >
-      {figure?.logo && <img alt="" src={figure.logo} />}
-      {!!figure?.logo || <div className={styles.circle}></div>}
+      {cell?.figure?.logo && <img alt="" src={cell.figure.logo} />}
+      {!cell?.figure?.logo && cell?.available && <div className={styles.circle}></div>}
     </div>
   );
 };
