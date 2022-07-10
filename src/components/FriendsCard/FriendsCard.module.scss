@@ -1,0 +1,10 @@
+.root {
+  display: flex;
+  width: 600px;
+  justify-content: space-between;
+
+  >div {
+    display: flex;
+    align-items: center;
+  }
+}
